@@ -33,7 +33,7 @@ Next.js offers some serious performance improvements over the standard React web
 1. Create a GraphQL API schema with TypeGraphQL
 2. Create a UserResolver for fetching user data
 
-- api/entity/Streams.ts: embedded posts.
+- api/entity/Stream.ts: embedded posts.
 - api/entity/User.ts: database schema.
 - api/middleware/isAuth.ts: make sure the current session contains a logged in user.
 - api/middleware/typegoose.ts: convert MongoDB Documents into readable objects.
@@ -45,6 +45,10 @@ Next.js offers some serious performance improvements over the standard React web
 In order to design a relational database, we need to understand the connections between our models. Let's define an **Entity** Relationship Diagram, or ERD for our models:
 
 ![entity](_readme-img/model-entities.png)
+
+A **document schema** is a JSON object that allows you to define the shape and content of documents and embedded documents in a collection. You can use a schema to require a specific set of fields, configure the content of a field, or to validate changes to a document based on its beginning and ending states.
+
+**Models** are fancy constructors compiled from Schema definitions. An instance of a model is called a **document**. Models are responsible for creating and reading documents from the underlying MongoDB database.
 
 **Method Decorator**: A Decorator is a special kind of declaration that can be attached to a class declaration, method, accessor, property, or parameter. Decorators use the form @expression, where expression must evaluate to a function that will be called at runtime with information about the decorated class.
 
@@ -64,6 +68,34 @@ A resolver function returns one of the following:
 
 - Data of the type required by the resolver's corresponding schema field (string, integer, object, etc.)
 - A promise that fulfills with data of the required type
+
+## Section 3: Typegoose
+
+1. Create authentication and stream resolvers
+2. Create password manager for authentication
+
+![entity](_readme-img/db.png)
+
+Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment. Mongoose supports both promises and callbacks, and even Typescript.
+
+Take Mongoose, add TypGraphQL and you get Typegoose. Typegoose is a wrapper library for easily writing MongoDB models with TypeScript. It allows us to easily apply Mongoose schemas and models in TypeScript.
+
+Typegoose will create the correct schemas and model mappings for our database. In getting started, it is important to realize that the decision to use Typegoose is based on using MongoDB. Given another database driver, you may want to consider using an Object Relational Mapping like TypeORM.
+
+- api/types/AuthInput.ts: input type to handle sending the data values (email + pw)
+- api/types/UserResponse.ts: returns a User object and JWT string
+- api/types/StreamInput.ts: stream with inputs for user
+- api/resolvers/AuthResolver.ts: Given an email address, check if a user already exists.
+If not, create a new user with a hashed password value
+Finally, assign and return the new user's JSON Web Token.
+- api/resolvers/StreamResolver.ts: we can query for single and multiple streams. We can create new streams, given a user is logged in and has a valid session userId.
+
+
+**Mutation queries** modify data in the data store and returns a value. It can be used to insert, update, or delete data. Mutations are defined as a part of the schema.
+
+**Partial<Type>** Not all the properties <Type> are required. (>< Required<Type>).
+
+## Section 4: Apollo Server
 
 ## Dependancies
 
@@ -91,6 +123,12 @@ A resolver function returns one of the following:
 
 `npm i --save-dev @types/express @types/jsonwebtoken`
 
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs): Optimized bcrypt in JavaScript with zero dependencies. Compatible to the C++ bcrypt binding on node.js and also working in the browser..
+
+`npm i bcryptjs`
+
+`npm i -D @types/bcryptjs`
+
 ## Useful links
 
 - [Strongly Typed Next.js](https://michaelstromer.nyc/books/strongly-typed-next-js/introduction)
@@ -98,4 +136,6 @@ A resolver function returns one of the following:
 - [TypeGraphQL - Modern framework for GraphQL API in Node.js](https://typegraphql.com/)
 - [typegoose - Define Mongoose models using TypeScript classes](https://typegoose.github.io/typegoose/)
 - [GraphQL Server Basics: Demystifying the `info` Argument in GraphQL Resolvers](https://www.prisma.io/blog/graphql-server-basics-demystifying-the-info-argument-in-graphql-resolvers-6f26249f613a)
-- 
+- [Mongoose Models](https://mongoosejs.com/docs/models.html)
+- [Mongoose Schemas](https://mongoosejs.com/docs/guide.html)
+- [GraphQL Queries and Mutations](https://graphql.org/learn/queries/)
