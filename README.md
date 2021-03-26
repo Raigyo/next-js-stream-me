@@ -74,7 +74,7 @@ A resolver function returns one of the following:
 1. Create authentication and stream resolvers
 2. Create password manager for authentication
 
-![entity](_readme-img/db.png)
+![db](_readme-img/db.png)
 
 Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment. Mongoose supports both promises and callbacks, and even Typescript.
 
@@ -114,6 +114,291 @@ Apply the scalars map to parse ObjectId properties into string values.
 - api/session: Mongoose creates the server sessions
 -  api/session/index.ts: we initialize a MongoDB connection. If any errors are thrown, they will be handled by the server at runtime.
 
+
+
+### GraphQL - Mutation tests
+
+#### Signup
+
+````graphql
+# Write your query or mutation here
+mutation Signup($email:String!, $password:String!) {
+  register(input:{email:$email, password: $password}) {
+    user {
+      _id
+      email
+    }
+    token
+  }
+}
+````
+
+QUERY VARIABLES:
+
+````graphql
+{"email": "vincent@test.com", "password": "password"}
+````
+
+OUTPUT:
+
+````json
+{
+  "data": {
+    "register": {
+      "user": {
+        "_id": "605dee52ca03904823f557cb",
+        "email": "vincent@test.com"
+      },
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNWRlZTUyY2EwMzkwNDgyM2Y1NTdjYiIsImlhdCI6MTYxNjc2ODU5NX0.0ylmqKVFZ8KOXblxO0LH0sdz5YeL-tdtXPzIMX1ykjU"
+    }
+  }
+}
+````
+![graphql-playground](_readme-img/graphql-playground.png)
+
+#### AddStream
+
+````graphql
+# Write your query or mutation here
+mutation AddStream($input:StreamInput!){
+  addStream(input:$input){
+    _id
+    title
+    description
+    url
+  }
+}
+````
+
+QUERY VARIABLES:
+
+````graphql
+{"input":{"title": "Hello Stream!", "description": "Welcome to my stream", "url": "youtube.com"}}
+````
+
+HTTP HEADERS:
+
+````graphql
+{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNWRlZTUyY2EwMzkwNDgyM2Y1NTdjYiIsImlhdCI6MTYxNjc2ODU5NX0.0ylmqKVFZ8KOXblxO0LH0sdz5YeL-tdtXPzIMX1ykjU"}
+````
+
+OUTPUT:
+
+````json
+{
+  "data": {
+    "addStream": {
+      "_id": "605df3ceca03904823f557cc",
+      "title": "Hello Stream!",
+      "description": "Welcome to my stream",
+      "url": "youtube.com"
+    }
+  }
+}
+````
+
+![graphql-playground](_readme-img/graphql-playground-add-stream.png)
+
+#### EditStream
+
+````graphql
+# Write your query or mutation here
+mutation EditStream($input:StreamInput!){
+  editStream(input:$input){
+    _id
+    title
+    description
+    url
+  }
+}
+````
+
+QUERY VARIABLES:
+
+````graphql
+{"input":{"id": "605df3ceca03904823f557cc", "title": "Hello again Stream!", "description": "Welcome to my stream", "url": "twitch.com"}}
+````
+
+HTTP HEADERS:
+
+````graphql
+{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNWRlZTUyY2EwMzkwNDgyM2Y1NTdjYiIsImlhdCI6MTYxNjc2ODU5NX0.0ylmqKVFZ8KOXblxO0LH0sdz5YeL-tdtXPzIMX1ykjU"}
+````
+
+OUTPUT:
+
+````json
+{
+  "data": {
+    "addStream": {
+      "_id": "605df5e0ca03904823f557cd",
+      "title": "Hello again Stream!",
+      "description": "Welcome to my stream",
+      "url": "twitch.com"
+    }
+  }
+}
+````
+
+![graphql-playground](_readme-img/graphql-playground-edit.png)
+
+#### DeleteStream
+
+````graphql
+# Write your query or mutation here
+mutation DeleteStream($id:ObjectId!){
+  deleteStream(streamId:$id)
+}
+````
+
+QUERY VARIABLES:
+
+````graphql
+{"id": "605df3ceca03904823f557cc"}
+````
+
+HTTP HEADERS:
+
+````graphql
+{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNWRlZTUyY2EwMzkwNDgyM2Y1NTdjYiIsImlhdCI6MTYxNjc2ODU5NX0.0ylmqKVFZ8KOXblxO0LH0sdz5YeL-tdtXPzIMX1ykjU"}
+````
+
+OUTPUT:
+
+````json
+{
+  "data": {
+    "deleteStream": true
+  }
+}
+````
+
+![graphql-playground](_readme-img/graphql-playground-delete.png)
+
+### GraphQL - Queries tests
+
+#### CurrentUser
+
+````graphql
+# Write your query or mutation here
+query CurrentUser{
+  currentUser{
+    _id
+    email
+  }
+}
+````
+
+HTTP HEADERS:
+
+````graphql
+{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNWRlZTUyY2EwMzkwNDgyM2Y1NTdjYiIsImlhdCI6MTYxNjc2ODU5NX0.0ylmqKVFZ8KOXblxO0LH0sdz5YeL-tdtXPzIMX1ykjU"}
+````
+
+OUTPUT:
+
+````json
+{
+  "data": {
+    "currentUser": {
+      "_id": "605dee52ca03904823f557cb",
+      "email": "vincent@test.com"
+    }
+  }
+}
+````
+
+![graphql-playground](_readme-img/graphql-playground-current.png)
+
+#### Streams
+
+````graphql
+# Write your query or mutation here
+query Streams{
+  streams{
+    _id
+    title
+    description
+    url
+  }
+}
+````
+
+HTTP HEADERS:
+
+````graphql
+{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNWRlZTUyY2EwMzkwNDgyM2Y1NTdjYiIsImlhdCI6MTYxNjc2ODU5NX0.0ylmqKVFZ8KOXblxO0LH0sdz5YeL-tdtXPzIMX1ykjU"}
+````
+
+OUTPUT:
+
+````json
+{
+  "data": {
+    "streams": [
+      {
+        "_id": "605df5e0ca03904823f557cd",
+        "title": "Hello again Stream!",
+        "description": "Welcome to my stream",
+        "url": "twitch.com"
+      }
+    ]
+  }
+}
+````
+
+![graphql-playground](_readme-img/graphql-playground-streams.png)
+
+#### Stream
+
+````graphql
+# Write your query or mutation here
+query Stream($streamId:ObjectId!){
+  stream(streamId:$streamId){
+    _id
+    title
+    description
+    url
+    author{
+      _id
+      email
+    }
+  }
+}
+````
+
+QUERY VARIABLES:
+
+````graphql
+{"streamId": "605df5e0ca03904823f557cd"}
+````
+
+HTTP HEADERS:
+
+````graphql
+{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNWRlZTUyY2EwMzkwNDgyM2Y1NTdjYiIsImlhdCI6MTYxNjc2ODU5NX0.0ylmqKVFZ8KOXblxO0LH0sdz5YeL-tdtXPzIMX1ykjU"}
+````
+
+OUTPUT:
+
+````json
+{
+  "data": {
+    "stream": {
+      "_id": "605df5e0ca03904823f557cd",
+      "title": "Hello again Stream!",
+      "description": "Welcome to my stream",
+      "url": "twitch.com",
+      "author": {
+        "_id": "605dee52ca03904823f557cb",
+        "email": "vincent@test.com"
+      }
+    }
+  }
+}
+````
+
+![graphql-playground](_readme-img/graphql-playground-stream.png)
 
 ## Dependancies
 
