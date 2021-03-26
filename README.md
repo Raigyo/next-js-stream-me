@@ -93,9 +93,27 @@ Finally, assign and return the new user's JSON Web Token.
 
 **Mutation queries** modify data in the data store and returns a value. It can be used to insert, update, or delete data. Mutations are defined as a part of the schema.
 
-**Partial<Type>** Not all the properties <Type> are required. (>< Required<Type>).
+**`Partial<Type>`** Not all the of properties `<Type>` are required. (>< `Required<Type`>).
 
 ## Section 4: Apollo Server
+
+1. Create a GraphQL API server with Apollo Server Express
+2. Create a MongoDB database connection with Connect Mongo
+3. Create environment variables for your localhost server
+
+Note: database cluster is hosted on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+
+**Apollo Server Express** allows us to build a GraphQL query interface on top of an existing Express server.
+
+- api/schema/index.ts: Add all typescript resolvers into the schema from the ../resolvers directory.
+Apply typegoose middleware to allow GraphQL work with MongoDB Documents.
+Apply the scalars map to parse ObjectId properties into string values.
+- api/server: Apollo Server Express runs the server
+- api/server/env.ts: Using the dotenv library, we are able to determine if a valid .env file is present and log all it's respective values.
+- api/server/index.ts: ApolloServer is initialized with an Express server.
+- api/session: Mongoose creates the server sessions
+-  api/session/index.ts: we initialize a MongoDB connection. If any errors are thrown, they will be handled by the server at runtime.
+
 
 ## Dependancies
 
@@ -107,13 +125,13 @@ Finally, assign and return the new user's JSON Web Token.
 
 `npm i typescript type-graphql graphql reflect-metadata`
 
-`npm i --save-dev @types/node`
+`npm i -D @types/node`
 
 - [Typegoose](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide): Define Mongoose models using TypeScript classes.
 
 `npm i @typegoose/typegoose mongoose connect-mongo`
 
-`npm install --save-dev @types/mongoose`
+`npm i -D @types/mongoose`
 
 - [express](https://www.npmjs.com/package/express): Fast, unopinionated, minimalist web framework for node..
 
@@ -121,13 +139,29 @@ Finally, assign and return the new user's JSON Web Token.
 
 `npm i express jsonwebtoken`
 
-`npm i --save-dev @types/express @types/jsonwebtoken`
+`npm i -D @types/express @types/jsonwebtoken`
 
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs): Optimized bcrypt in JavaScript with zero dependencies. Compatible to the C++ bcrypt binding on node.js and also working in the browser..
 
 `npm i bcryptjs`
 
 `npm i -D @types/bcryptjs`
+
+- [apollo-server-express](https://www.npmjs.com/package/apollo-server-express): This is the Express and Connect integration of GraphQL Server. Apollo Server is a community-maintained open-source GraphQL server that works with many Node.js HTTP server frameworks.
+
+`npm i apollo-server-express cors ts-node`
+
+- [nodemon](https://www.npmjs.com/package/nodemon): nodemon is a tool that helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.
+
+`npm i -D nodemon`
+
+- [dotenv](https://www.npmjs.com/package/dotenv): Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env. Storing configuration in the environment separate from code is based on The Twelve-Factor App methodology.
+
+`npm i dotenv`
+
+`npm install -D @types/dotenv`
+
+Test: `npx ts-node server/env.ts`
 
 ## Useful links
 
@@ -138,4 +172,5 @@ Finally, assign and return the new user's JSON Web Token.
 - [GraphQL Server Basics: Demystifying the `info` Argument in GraphQL Resolvers](https://www.prisma.io/blog/graphql-server-basics-demystifying-the-info-argument-in-graphql-resolvers-6f26249f613a)
 - [Mongoose Models](https://mongoosejs.com/docs/models.html)
 - [Mongoose Schemas](https://mongoosejs.com/docs/guide.html)
+- [Faster Mongoose Queries With Lean](https://mongoosejs.com/docs/tutorials/lean.html)
 - [GraphQL Queries and Mutations](https://graphql.org/learn/queries/)
