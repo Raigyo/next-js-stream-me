@@ -16,6 +16,10 @@ Next.js offers some serious performance improvements over the standard React web
 - [Data fetching](https://nextjs.org/docs/basic-features/data-fetching)
 - [Typescript Support](https://nextjs.org/docs/basic-features/typescript)
 
+Here are the different sections / steps to make this project.
+
+For more detailled information see: [Strongly Typed Next.js Book](https://michaelstromer.nyc/books/strongly-typed-next-js/introduction)
+
 ## Section 1: Next.js
 
 1. Create a Next.js web application with TypeScript
@@ -102,6 +106,7 @@ Finally, assign and return the new user's JSON Web Token.
 3. Create environment variables for your localhost server
 
 Note: database cluster is hosted on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+The application uses **Serverless architecture** (also known as serverless computing or function as a service, FaaS) is a software design pattern where applications are hosted by a third-party service, eliminating the need for server software and hardware management by the developer. Applications are broken up into individual functions that can be invoked and scaled individually.
 
 **Apollo Server Express** allows us to build a GraphQL query interface on top of an existing Express server.
 
@@ -117,6 +122,12 @@ Apply the scalars map to parse ObjectId properties into string values.
 
 
 ### GraphQL - Mutation tests
+
+`cd api`
+
+`npm run dev`
+
+[http://localhost:8000/graphql](http://localhost:8000/graphql)
 
 #### Signup
 
@@ -400,11 +411,101 @@ OUTPUT:
 
 ![graphql-playground](_readme-img/graphql-playground-stream.png)
 
+## Section 5: Apollo Client
+
+1. Create an Apollo Client instance on the frontend web
+2. Generate queries and mutations with GraphQL codegen
+
+The most efficient use of Typescript and GraphQL is generating frontend queries, using the **GraphQL Codegen** library.
+
+Using GraphQL Codegen, we generate queries and mutations for the frontend client.
+
+- app/.graphql-let.yml: file to configure GraphQL Codegen behavior.
+- app/next-env.d.ts: global properties for the Next project (allows TS to read YML files)
+- app/next.config.js: webpack config
+- app/lib/graphql/currentUser.graphql: query - Every query needs a name, so we called this one CurrentUser.
+- app/lib/graphql/stream.graphql: query -  this query requires an input called streamId. We will use it to fetch individual streams
+- app/lib/graphql/streams.graphql: query - this query fetches the current user's streams, so they will need to be logged in.
+- app/lib/graphql/createStream.graphql: mutation - Note that this mutation has an input value of StreamInput, which is required.
+- app/lib/graphql/editStream.graphql: mutation
+- app/lib/graphql/deleteStream.graphql: mutation
+- app/lib/graphql/signin.graphql: mutation
+- app/lib/graphql/signup.graphql: mutation
+- app/lib/apollo.ts: we connect to the Apollo Client with an HttpLink. During initialization, we also need to include credentials in order to support GraphQL authentication. On any Next.js page that uses data fetching methods, we can re-hydrate the Apollo client cache and fetch data from the cache instead of the server. The useApollo hook will handle initializing and caching once its integrated with a root component, like _app.tsx.
+
+Generate the queries and mutations type definition files with graphql-let.:
+
+`cd app`
+
+`npx graphql-let`
+
+````bash
+✔ Parse configuration
+[ graphql-let ] 8 .d.ts were generated.
+````
+
+Files are generated in: *app/lib/graphql/*
+
+### Local API schema
+
+**app/.graphql-let.yml**
+
+````yml
+schema: 'lib/schema.graphqls'
+documents: '**/*.graphql'
+plugins:
+  - typescript
+  - typescript-operations
+  - typescript-react-apollo
+cacheDir: __generated__
+````
+
+Grab a copy of the GraphQL schema by copying the entire file *api/schema/schema.gql* and pasting it's contents inside a new file called *app/lib/schema.graphqls*.
+
+## Section 6: Authentication
+
 ## Dependancies
+
+### APP
+
+- [Next.js](https://nextjs.org/docs): Next.js gives you the best developer experience with all the features you need for production: hybrid static & server rendering, TypeScript support, smart bundling, route pre-fetching, and more.
+
+Setup: `npx create-next-app`
+
+or
+
+Manual setup: `npm i next react react-dom`
+
+- [typescript](https://www.npmjs.com/package/typescript): TypeScript is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript.
+
+`npm i -D typescript`
+
+- (@types/react)[https://www.npmjs.com/package/@types/react]: This package contains type definitions for React.
+
+`npm i -D @types/react @types/react-dom @types/node`
 
 - [MATERIAL-UI](https://material-ui.com/): React components for faster and easier web development. Build your own design system, or start with Material Design.
 
 `npm install @material-ui/core`
+
+- [GraphQL Codegen](https://www.graphql-code-generator.com/): Generate code from your GraphQL schema and operations with a simple CLI.
+
+`npm install -D graphql-let @graphql-codegen/cli @graphql-codegen/plugin-helpers @graphql-codegen/typescript @graphql-codegen/typescript-operations @graphql-codegen/typescript-react-apollo yaml-loader`
+
+- [@apollo/client](https://www.npmjs.com/package/@apollo/client): Apollo Client is a fully-featured caching GraphQL client with integrations for React, Angular, and more. It allows you to easily build UI components that fetch data via GraphQL.
+
+
+- [@apollo/client](https://www.npmjs.com/package/@apollo/client): Apollo Client is a fully-featured caching GraphQL client with integrations for React, Angular, and more. It allows you to easily build UI components that fetch data via GraphQL.
+
+`npm i @apollo/client`
+
+- [graphql](https://www.npmjs.com/package/graphql): The JavaScript reference implementation for GraphQL, a query language for APIs created by Facebook.
+
+`npm i graphql`
+
+`npx graphql-let init`
+
+### API
 
 - [TypeGraphQL](https://typegraphql.com/docs/installation.html): TypeGraphQL is a library that makes this process enjoyable by defining the schema using only classes and a bit of decorator magic. .
 
@@ -447,6 +548,9 @@ OUTPUT:
 `npm install -D @types/dotenv`
 
 Test: `npx ts-node server/env.ts`
+
+
+
 
 ## Useful links
 

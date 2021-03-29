@@ -12,6 +12,12 @@ Préservation automatique Corel/
 package-lock.json
 .next
 
+# GraphQL
+
+*.graphql.d.ts
+*.graphqls.d.ts
+__generated__
+
 # dependencies
 /node_modules
 /.pnp
