@@ -432,6 +432,7 @@ Using GraphQL Codegen, we generate queries and mutations for the frontend client
 - app/lib/graphql/signin.graphql: mutation
 - app/lib/graphql/signup.graphql: mutation
 - app/lib/apollo.ts: we connect to the Apollo Client with an HttpLink. During initialization, we also need to include credentials in order to support GraphQL authentication. On any Next.js page that uses data fetching methods, we can re-hydrate the Apollo client cache and fetch data from the cache instead of the server. The useApollo hook will handle initializing and caching once its integrated with a root component, like _app.tsx.
+- app/pages/_app.tsx: apollo intergration
 
 Generate the queries and mutations type definition files with graphql-let.:
 
@@ -463,6 +464,16 @@ cacheDir: __generated__
 Grab a copy of the GraphQL schema by copying the entire file *api/schema/schema.gql* and pasting it's contents inside a new file called *app/lib/schema.graphqls*.
 
 ## Section 6: Authentication
+
+1. Create components and pages to handle data fetching
+2. Create an authentication flow for login and registration
+
+- app/lib/useAuth.tsx: Auth Provider - The purpose of the AuthProvider is to create a global user object, and handle any authentication logic with a single hook. Once we declare the AuthProvider, you may notice that authentication becomes much quicker to implement.
+- app/pages/_app.tsx: The useAuth.tsx code snippet creates a global auth context called AuthContext, but to access it's props we need to wrap the root app/pages/_app.tsx to access the global user object using the useAuth hook.
+- app/components/Header.tsx: header with sign in/up, dark mode toggle
+- app/pages/auth/signin.tsx: used in header
+- app/pages/auth/signup.tsx: used in header
+- app/pages/auth/signout.tsx: used in header
 
 ## Dependancies
 
@@ -563,3 +574,4 @@ Test: `npx ts-node server/env.ts`
 - [Mongoose Schemas](https://mongoosejs.com/docs/guide.html)
 - [Faster Mongoose Queries With Lean](https://mongoosejs.com/docs/tutorials/lean.html)
 - [GraphQL Queries and Mutations](https://graphql.org/learn/queries/)
+- [Building Frontend Applications By Mocking Your Entire API With Testing Tools](https://medium.com/swlh/building-frontend-applications-by-mocking-your-entire-api-with-testing-tools-2f050359677f)
