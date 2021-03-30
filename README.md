@@ -16,6 +16,10 @@ Next.js offers some serious performance improvements over the standard React web
 - [Data fetching](https://nextjs.org/docs/basic-features/data-fetching)
 - [Typescript Support](https://nextjs.org/docs/basic-features/typescript)
 
+![capture](_readme-img/app-edit.png)
+
+![capture](_readme-img/app-streams-giphy.png)
+
 Here are the different sections / steps to make this project.
 
 For more detailled information see: [Strongly Typed Next.js Book](https://michaelstromer.nyc/books/strongly-typed-next-js/introduction)
@@ -474,6 +478,19 @@ Grab a copy of the GraphQL schema by copying the entire file *api/schema/schema.
 - app/pages/auth/signin.tsx: used in header
 - app/pages/auth/signup.tsx: used in header
 - app/pages/auth/signout.tsx: used in header
+
+## Section 7: Streaming
+
+1. Create components and pages to handle data fetching
+2. Create a streaming flow for creating and viewing streams
+
+- app/components/Posts.tsx: users posted streams
+- app/components/Hero.tsx: on each stream's detail page, we will display a banner or "hero" component called Hero.
+- app/components/Content.tsx: on each stream's detail page, we will also display content based on the current stream's url, called Content.
+- app/pages/streams/index.tsx: list of streams that belong to the current logged user.
+- app/pages/streams/\[id\]/index.tsx: Stream Detail Page.
+- app/pages/streams/new.tsx: create stream.
+- app/pages/streams/edit/\[id\]/index.tsx: edit stream.
 
 ## Dependancies
 

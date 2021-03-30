@@ -9,7 +9,7 @@ import {
   Switch,
 } from '@material-ui/core';
 import Link from 'next/link';
-import { useAuth } from 'lib/useAuth';
+import { useAuth } from '../lib/useAuth';
 
 export default function Header({ darkState, handleThemeChange }) {
   const classes = useStyles();

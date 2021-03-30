@@ -47,7 +47,7 @@ function useProvideAuth() {
       if (data.login.token && data.login.user) {
         sessionStorage.setItem('token', data.login.token);
         client.resetStore().then(() => {
-          router.push('/');
+          router.push('/streams');
         });
       } else {
         setError("Invalid Login");

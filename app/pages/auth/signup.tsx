@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import { useAuth } from 'lib/useAuth';
+import { useAuth } from '../../lib/useAuth';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
