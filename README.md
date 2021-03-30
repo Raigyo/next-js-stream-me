@@ -21,6 +21,7 @@ In this app, user can, create an account and signin to post medias on a dashboar
 ## Test locally
 
 - Clone
+- Use [local version branch](https://github.com/Raigyo/next-js-stream-me/tree/local-version).
 
 ### API
 
