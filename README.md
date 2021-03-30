@@ -531,6 +531,8 @@ Grab a copy of the GraphQL schema by copying the entire file *api/schema/schema.
 - app/pages/streams/new.tsx: create stream.
 - app/pages/streams/edit/\[id\]/index.tsx: edit stream.
 
+## Section 8: Deployment
+
 ------------------
 
 ## Dependancies
