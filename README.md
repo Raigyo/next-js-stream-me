@@ -2,25 +2,63 @@
 
 March 2021
 
-> 🔨  From udemy: [Strongly Typed Next.js - Michael Stromer](https://www.udemy.com/course/strongly-typed-next-js/)
+> 🔨  Medias sharing plateform using strongly typed Next.js (using Typescript), MongoDB, Apollo Client and Sever (GraphQL). From udemy: [Strongly Typed Next.js - Michael Stromer](https://www.udemy.com/course/strongly-typed-next-js/)
 
 * * *
 
-
 ![logo](_readme-img/nextjs.png)
 
-Next.js offers some serious performance improvements over the standard React web application. Here we will be using Next.js for:
+In this app, user can, create an account and signin to post medias on a dashboard.
 
-
-- [Routing Pages](https://nextjs.org/docs/routing/introduction)
-- [Data fetching](https://nextjs.org/docs/basic-features/data-fetching)
-- [Typescript Support](https://nextjs.org/docs/basic-features/typescript)
+![capture](_readme-img/app-streams-index.png)
 
 ![capture](_readme-img/app-edit.png)
 
 ![capture](_readme-img/app-streams-giphy.png)
 
-Here are the different sections / steps to make this project.
+------------------
+
+## Test locally
+
+- Clone
+
+### API
+
+`cd api`
+
+`npm install`
+
+You need to create a [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) cluster and provide its url in *.env* file.
+
+It should look like:
+
+*mongodb+srv://<USER_NAME>:<PASSWORD>@cluster0.xxxxx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority*
+
+````.env
+MONGO_URL=REPLACE_WITH_MONGO_URL
+URL_APP=http://localhost:3000
+````
+You will also need to whitelist your IP adress in MongoDB Atlas security panel.
+
+To launch server:
+
+`npm run dev`
+
+GraphQL playground can be reached using [http://localhost:8000/graphql](http://localhost:8000/graphql).
+
+### API
+
+`cd app`
+
+`npm install`
+
+`npm run dev`
+
+Website can be reached on: [http://localhost:3000](http://localhost:3000)
+
+------------------
+
+Below are the different sections / steps to make this project.
 
 For more detailled information see: [Strongly Typed Next.js Book](https://michaelstromer.nyc/books/strongly-typed-next-js/introduction)
 
@@ -492,6 +530,8 @@ Grab a copy of the GraphQL schema by copying the entire file *api/schema/schema.
 - app/pages/streams/new.tsx: create stream.
 - app/pages/streams/edit/\[id\]/index.tsx: edit stream.
 
+------------------
+
 ## Dependancies
 
 ### APP
@@ -577,8 +617,7 @@ Manual setup: `npm i next react react-dom`
 
 Test: `npx ts-node server/env.ts`
 
-
-
+------------------
 
 ## Useful links
 
@@ -592,3 +631,5 @@ Test: `npx ts-node server/env.ts`
 - [Faster Mongoose Queries With Lean](https://mongoosejs.com/docs/tutorials/lean.html)
 - [GraphQL Queries and Mutations](https://graphql.org/learn/queries/)
 - [Building Frontend Applications By Mocking Your Entire API With Testing Tools](https://medium.com/swlh/building-frontend-applications-by-mocking-your-entire-api-with-testing-tools-2f050359677f)
+
+------------------
