@@ -6,6 +6,8 @@ March 2021
 
 * * *
 
+Demo on [Heroku](https://raigyo-next-stream-me.herokuapp.com/).
+
 ![logo](_readme-img/nextjs.png)
 
 In this app, user can, create an account and signin to post medias on a dashboard.
@@ -17,6 +19,26 @@ In this app, user can, create an account and signin to post medias on a dashboar
 ![capture](_readme-img/app-streams-giphy.png)
 
 ------------------
+
+## Test online
+
+Demo on [Heroku](https://raigyo-next-stream-me.herokuapp.com/).
+
+You can login using these credentials if you dont want to sign up:
+
+- User: raigyo@test.com
+- PW: 123456
+
+Exemple of url to use:
+
+Youtube:
+`https://www.youtube.com/embed/5qap5aO4i9A`
+
+Soundcloud:
+`https://w.soundcloud.com/player/?visual=true&url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F794437894&show_artwork=true`
+
+Giphy:
+`https://media.giphy.com/media/eNenS3Lhut94ZWkmRW/giphy.gif`
 
 ## Test locally
 
@@ -691,6 +713,8 @@ git remote add heroku <your-heroku-remote-url>
 git push heroku master
 ````
 
+In Heroku don't forget to put `MONGO_URL=REPLACE_WITH_MONGO_URL` as config var.
+
 ------------------
 
 ## Dependancies
@@ -792,5 +816,7 @@ Test: `npx ts-node server/env.ts`
 - [Faster Mongoose Queries With Lean](https://mongoosejs.com/docs/tutorials/lean.html)
 - [GraphQL Queries and Mutations](https://graphql.org/learn/queries/)
 - [Building Frontend Applications By Mocking Your Entire API With Testing Tools](https://medium.com/swlh/building-frontend-applications-by-mocking-your-entire-api-with-testing-tools-2f050359677f)
+- [Building Frontend Applications By Mocking Your Entire API With Testing Tools](https://medium.com/swlh/building-frontend-applications-by-mocking-your-entire-api-with-testing-tools-2f050359677f)
+- [Building Frontend Applications By Mocking Your Entire API With Testing Tools](https://iframely.com/)
 
 ------------------
