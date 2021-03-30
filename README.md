@@ -6,6 +6,8 @@ March 2021
 
 * * *
 
+Demo on [Heroku](https://raigyo-next-stream-me.herokuapp.com/).
+
 ![logo](_readme-img/nextjs.png)
 
 In this app, user can, create an account and signin to post medias on a dashboard.
@@ -17,6 +19,26 @@ In this app, user can, create an account and signin to post medias on a dashboar
 ![capture](_readme-img/app-streams-giphy.png)
 
 ------------------
+
+## Test online
+
+Demo on [Heroku](https://raigyo-next-stream-me.herokuapp.com/).
+
+You can login using these credentials if you dont want to sign up:
+
+- User: raigyo@test.com
+- PW: 123456
+
+Exemple of url to use:
+
+Youtube:
+`https://www.youtube.com/embed/5qap5aO4i9A`
+
+Soundcloud:
+`https://w.soundcloud.com/player/?visual=true&url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F794437894&show_artwork=true`
+
+Giphy:
+`https://media.giphy.com/media/eNenS3Lhut94ZWkmRW/giphy.gif`
 
 ## Test locally
 
@@ -531,6 +553,168 @@ Grab a copy of the GraphQL schema by copying the entire file *api/schema/schema.
 - app/pages/streams/new.tsx: create stream.
 - app/pages/streams/edit/\[id\]/index.tsx: edit stream.
 
+## Section 8: Deployment
+
+1. Create a monorepo for their project using yarn workspaces
+2. Deploy their project to Heroku using the Heroku CLI
+
+### Install Yarn
+
+Test if it exists:
+
+`yarn --version`
+
+Otherwise:
+
+`npm install --global yarn`
+
+### Workspaces
+
+In the root:
+
+**package.json**
+
+````json
+{
+  "name": "stream-me",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "yarn workspace @stream-me/app run build",
+    "start": "yarn workspace @stream-me/api run start",
+    "dev": "yarn workspace @stream-me/api run dev"
+  },
+  "workspaces": [
+    "api",
+    "app"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+````
+
+### Packages
+
+In **api/package.json**:
+
+````json
+{
+  "name": "@stream-me/api",
+}
+````
+
+In **app/package.json**:
+
+
+````json
+{
+  "name": "@stream-me/app",
+}
+````
+
+In root:
+
+`yarn install`
+
+After the installation completes, you may notice @stream-me in your node_modules directory, with some symbolic links to each project.
+
+### Build Command
+
+In **app/package.json**:
+
+
+````json
+  "scripts": {
+    "dev": "next dev",
+    "build": "npx graphql-let && next build",
+    "start": "next start"
+  },
+````
+
+### Apollo Client
+
+In **app/lib/apollo.ts**, remove the absolute URL pointing to http://localhost:8000/graphl, and replace it with a relative URL: /graphql.
+
+````ts
+function createApolloClient() {
+
+  {/* ... */}
+
+  const httpLink = new HttpLink({
+    uri: '/graphql',
+    credentials: 'include',
+  });
+
+  {/* ... */}
+}
+````
+
+### Next Project
+
+Create a new file in your app directory, **app/index.ts** and insert the following:
+
+````ts
+import next from 'next';
+
+const nextApp = next({
+  dev: process.env.NODE_ENV !== 'production',
+  dir: __dirname,
+});
+
+export default nextApp;
+````
+
+### Next Custom Server
+
+In order to serve the frontend app on the backend, we will prepare a Next.js custom server.
+
+Make the following changes inside **api/server/index.ts**:
+
+````ts
+import nextApp from '@stream-me/app';
+
+const handle = nextApp.getRequestHandler();
+
+{/* ... */}
+
+const corsOptions = {
+  credentials: true,
+};
+
+{/* ... */}
+
+apolloServer.applyMiddleware({ app, cors: corsOptions });
+
+// create next app request handler
+await nextApp.prepare();
+app.get('*', (req, res) => handle(req, res));
+````
+
+In root:
+
+````bash
+npm run dev
+npm run build
+npm run start
+````
+
+### Heroku
+
+````bash
+heroku login
+heroku create your-heroku-app-name
+git status
+git add .
+git commit -m "update project"
+git remote add heroku <your-heroku-remote-url>
+git push heroku master
+````
+
+In Heroku don't forget to put `MONGO_URL=REPLACE_WITH_MONGO_URL` as config var.
+
 ------------------
 
 ## Dependancies
@@ -632,5 +816,7 @@ Test: `npx ts-node server/env.ts`
 - [Faster Mongoose Queries With Lean](https://mongoosejs.com/docs/tutorials/lean.html)
 - [GraphQL Queries and Mutations](https://graphql.org/learn/queries/)
 - [Building Frontend Applications By Mocking Your Entire API With Testing Tools](https://medium.com/swlh/building-frontend-applications-by-mocking-your-entire-api-with-testing-tools-2f050359677f)
+- [Building Frontend Applications By Mocking Your Entire API With Testing Tools](https://medium.com/swlh/building-frontend-applications-by-mocking-your-entire-api-with-testing-tools-2f050359677f)
+- [Building Frontend Applications By Mocking Your Entire API With Testing Tools](https://iframely.com/)
 
 ------------------
