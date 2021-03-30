@@ -533,6 +533,164 @@ Grab a copy of the GraphQL schema by copying the entire file *api/schema/schema.
 
 ## Section 8: Deployment
 
+1. Create a monorepo for their project using yarn workspaces
+2. Deploy their project to Heroku using the Heroku CLI
+
+### Install Yarn
+
+Test if it exists:
+
+`yarn --version`
+
+Otherwise:
+
+`npm install --global yarn`
+
+### Workspaces
+
+In the root:
+
+**package.json**
+
+````json
+{
+  "name": "stream-me",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "yarn workspace @stream-me/app run build",
+    "start": "yarn workspace @stream-me/api run start",
+    "dev": "yarn workspace @stream-me/api run dev"
+  },
+  "workspaces": [
+    "api",
+    "app"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+````
+
+### Packages
+
+In **api/package.json**:
+
+````json
+{
+  "name": "@stream-me/api",
+}
+````
+
+In **app/package.json**:
+
+
+````json
+{
+  "name": "@stream-me/app",
+}
+````
+
+In root:
+
+`yarn install`
+
+After the installation completes, you may notice @stream-me in your node_modules directory, with some symbolic links to each project.
+
+### Build Command
+
+In **app/package.json**:
+
+
+````json
+  "scripts": {
+    "dev": "next dev",
+    "build": "npx graphql-let && next build",
+    "start": "next start"
+  },
+````
+
+### Apollo Client
+
+In **app/lib/apollo.ts**, remove the absolute URL pointing to http://localhost:8000/graphl, and replace it with a relative URL: /graphql.
+
+````ts
+function createApolloClient() {
+
+  {/* ... */}
+
+  const httpLink = new HttpLink({
+    uri: '/graphql',
+    credentials: 'include',
+  });
+
+  {/* ... */}
+}
+````
+
+### Next Project
+
+Create a new file in your app directory, **app/index.ts** and insert the following:
+
+````ts
+import next from 'next';
+
+const nextApp = next({
+  dev: process.env.NODE_ENV !== 'production',
+  dir: __dirname,
+});
+
+export default nextApp;
+````
+
+### Next Custom Server
+
+In order to serve the frontend app on the backend, we will prepare a Next.js custom server.
+
+Make the following changes inside **api/server/index.ts**:
+
+````ts
+import nextApp from '@stream-me/app';
+
+const handle = nextApp.getRequestHandler();
+
+{/* ... */}
+
+const corsOptions = {
+  credentials: true,
+};
+
+{/* ... */}
+
+apolloServer.applyMiddleware({ app, cors: corsOptions });
+
+// create next app request handler
+await nextApp.prepare();
+app.get('*', (req, res) => handle(req, res));
+````
+
+In root:
+
+````bash
+npm run dev
+npm run build
+npm run start
+````
+
+### Heroku
+
+````bash
+heroku login
+heroku create your-heroku-app-name
+git status
+git add .
+git commit -m "update project"
+git remote add heroku <your-heroku-remote-url>
+git push heroku master
+````
+
 ------------------
 
 ## Dependancies
