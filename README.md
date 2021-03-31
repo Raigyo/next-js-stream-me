@@ -69,7 +69,7 @@ To launch server:
 
 GraphQL playground can be reached using [http://localhost:8000/graphql](http://localhost:8000/graphql).
 
-### API
+### APP
 
 `cd app`
 
@@ -744,9 +744,6 @@ Manual setup: `npm i next react react-dom`
 - [GraphQL Codegen](https://www.graphql-code-generator.com/): Generate code from your GraphQL schema and operations with a simple CLI.
 
 `npm install -D graphql-let @graphql-codegen/cli @graphql-codegen/plugin-helpers @graphql-codegen/typescript @graphql-codegen/typescript-operations @graphql-codegen/typescript-react-apollo yaml-loader`
-
-- [@apollo/client](https://www.npmjs.com/package/@apollo/client): Apollo Client is a fully-featured caching GraphQL client with integrations for React, Angular, and more. It allows you to easily build UI components that fetch data via GraphQL.
-
 
 - [@apollo/client](https://www.npmjs.com/package/@apollo/client): Apollo Client is a fully-featured caching GraphQL client with integrations for React, Angular, and more. It allows you to easily build UI components that fetch data via GraphQL.
 
